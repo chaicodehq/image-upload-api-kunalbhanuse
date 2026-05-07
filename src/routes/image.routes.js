@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router } from "express";
 import {
   uploadImage,
   listImages,
@@ -6,23 +6,40 @@ import {
   downloadImage,
   downloadThumbnail,
   deleteImage,
-} from '../controllers/image.controller.js';
-import { upload } from '../middlewares/upload.middleware.js';
-import { validateObjectId } from '../middlewares/validateObjectId.middleware.js';
-
-/**
- * TODO: Define image routes
- *
- * POST   /                  → uploadImage (use upload.single('image') middleware)
- * GET    /                  → listImages
- * GET    /:id               → getImage (use validateObjectId middleware)
- * GET    /:id/download      → downloadImage (use validateObjectId middleware)
- * GET    /:id/thumbnail     → downloadThumbnail (use validateObjectId middleware)
- * DELETE /:id               → deleteImage (use validateObjectId middleware)
- */
+} from "../controllers/image.controller.js";
+import { upload } from "../middlewares/upload.middleware.js";
+import { validateObjectId } from "../middlewares/validateObjectId.middleware.js";
 
 const router = Router();
 
-// Your routes here
+/**
+ * POST / → upload image
+ */
+router.post("/", upload.single("image"), uploadImage);
+
+/**
+ * GET / → list images
+ */
+router.get("/", listImages);
+
+/**
+ * GET /:id → get metadata
+ */
+router.get("/:id", validateObjectId, getImage);
+
+/**
+ * GET /:id/download → download original
+ */
+router.get("/:id/download", validateObjectId, downloadImage);
+
+/**
+ * GET /:id/thumbnail → download thumbnail
+ */
+router.get("/:id/thumbnail", validateObjectId, downloadThumbnail);
+
+/**
+ * DELETE /:id → delete image
+ */
+router.delete("/:id", validateObjectId, deleteImage);
 
 export default router;

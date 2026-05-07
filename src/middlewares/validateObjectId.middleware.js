@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 /**
  * TODO: Validate MongoDB ObjectId
@@ -8,6 +8,17 @@ import mongoose from 'mongoose';
  * 2. If invalid: return 400 with { error: { message: 'Invalid id format' } }
  * 3. If valid: call next()
  */
+
 export function validateObjectId(req, res, next) {
-  // Your code here
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      error: {
+        message: "Invalid id format",
+      },
+    });
+  }
+
+  next();
 }
